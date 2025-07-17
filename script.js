@@ -1,6 +1,21 @@
-async function main() {
+//get elements
+const form = document.querySelector("form");
+const input = document.querySelector("input");
+
+function getCity(){
+  let city = "";
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    city = input.value.trim();
+    main(city);
+  });
+}
+
+
+
+getCity();
+async function main(city) {
   const key = "K482S4YYGBPQEHZ292PLUAFN8";
-  let city = getCity();
   let url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=${key}&contentType=json`;
 
   const data = await getData(url);
@@ -8,12 +23,8 @@ async function main() {
   printData(filteredData);
 }
 
-main();
+//main();
 
-function getCity() {
-  let city = prompt("Enter a city: ");
-  return city;
-}
 
 async function getData(url) {
   try {
