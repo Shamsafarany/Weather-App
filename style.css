@@ -1,0 +1,13 @@
+body{
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    height: 100vh;
+}
+.container{
+    margin: auto;
+    height: 70%;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 0 15px;
+}
