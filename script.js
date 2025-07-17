@@ -1,10 +1,11 @@
 async function main() {
   const key = "K482S4YYGBPQEHZ292PLUAFN8";
   let city = getCity();
-  let url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=us&key=${key}&contentType=json`;
+  let url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=${key}&contentType=json`;
 
   const data = await getData(url);
-  printData(data);
+  const filteredData = await requiredData(data);
+  printData(filteredData);
 }
 
 main();
@@ -26,7 +27,26 @@ async function getData(url) {
 }
 
 function printData(data) {
-  console.log("Temp: ", data.currentConditions.temp);
-  console.log("Humidity: ", data.currentConditions.humidity);
-  console.log("Conditions: ", data.currentConditions.conditions);
+  console.log("Temperature:", data.temperature + " °C");
+  console.log("Feels Like:", data.feelsLike + " °C");
+  console.log("Humidity:", data.humidity + " %");
+  console.log("Wind Speed:", data.windSpeed + " km/h");
+  console.log("Precipitation:", data.rain);
+  console.log("Rain Chance:", data.rainChance + " %");
+  console.log("Conditions:", data.conditions);
+  console.log("Icon:", data.icon);
+}
+
+function requiredData(data) {
+  const filteredData = {
+    temperature: data.currentConditions.temp,
+    feelsLike: data.currentConditions.feelslike,
+    humidity: data.currentConditions.humidity,
+    windSpeed: data.currentConditions.windspeed,
+    rainChance: data.currentConditions.precipprob,
+    rain: data.currentConditions.precip,
+    conditions: data.currentConditions.conditions,
+    icon: data.currentConditions.icon,
+  };
+  return filteredData;
 }
