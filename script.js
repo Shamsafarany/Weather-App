@@ -18,8 +18,8 @@ async function main(city) {
   let url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=${key}&contentType=json`;
 
   const data = await getData(url);
-  const filteredData = await requiredData(data);
-  printData(filteredData);
+  const weekData = await getDays(data);
+  printData(weekData);
 }
 
 async function getData(url) {
@@ -41,47 +41,88 @@ async function getData(url) {
   }
 }
 
-function printData(data) {
-  console.log("Temperature:", data.temperature + " °C");
-  console.log("Feels Like:", data.feelsLike + " °C");
-  console.log("Humidity:", data.humidity + " %");
-  console.log("Wind Speed:", data.windSpeed + " km/h");
-  console.log("Precipitation:", data.rain);
-  console.log("Rain Chance:", data.rainChance + " %");
-  console.log("Conditions:", data.conditions);
-  console.log("Icon:", data.icon);
+function printData(weekData) {
+  const displayContainer = document.querySelector(".displaycontainer");
+  displayContainer.innerHTML = "";
+  weekData.forEach((day, index) => {
+    const display = document.createElement("div");
+    display.classList.add("display");
+    const temp = document.createElement("div");
+    temp.classList.add("temp");
+    const text = document.createElement("p");
+    text.classList.add("text");
+    display.appendChild(temp);
+    display.appendChild(text);
+    displayContainer.appendChild(display);
 
-  const date = new Date(data.datetime); // now it's a full YYYY-MM-DD string
-  const formattedDate = date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
+    if (index === 0) {
+      display.classList.add("today");
+    }
 
-  temp.innerHTML = `${data.temperature}<span>°C </span>`;
-  p.innerHTML = `
-  Date: ${formattedDate} <br>
-  Feels like: ${data.feelsLike} °C<br>
-  Humidity: ${data.humidity} %<br>
-  Wind Speed: ${data.windSpeed} km/h<br>
-  Precipitation: ${data.rain} %<br>
-  Rain Chance: ${data.rainChance} %<br>
-  Conditions: ${data.conditions}<br>
-  Icon: ${data.icon}
+    console.log("Temperature:", day.temperature + " °C");
+    console.log("Feels Like:", day.feelsLike + " °C");
+    console.log("Humidity:", day.humidity + " %");
+    console.log("Wind Speed:", day.windSpeed + " km/h");
+    console.log("Precipitation:", day.rain);
+    console.log("Rain Chance:", day.rainChance + " %");
+    console.log("Conditions:", day.conditions);
+    console.log("Icon:", day.icon);
+
+    const iconImg = document.createElement("img");
+    iconImg.src = `https://github.com/visualcrossing/WeatherIcons/blob/main/PNG/1st%20Set%20-%20Color/${day.icon}.png?raw=true`;
+    iconImg.style.width = "50px";
+    display.appendChild(iconImg);
+    iconImg.style.width = "50px";
+    display.appendChild(iconImg);
+    const date = new Date(day.datetime); // now it's a full YYYY-MM-DD string
+    const formattedDate = date.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+    if (index === 0) {
+      temp.innerHTML = `${day.temperature}<span>°C </span>`;
+      text.innerHTML = `
+       TODAY <br>
+  Date:<strong> ${formattedDate} </strong> <br>
+  Feels like: ${day.feelsLike} °C<br>
+  Humidity: ${day.humidity} %<br>
+  Wind Speed: ${day.windSpeed} km/h<br>
+  Rain Chance: ${day.rainChance} %<br>
+  Conditions: ${day.conditions}<br>
 `;
+    } else {
+      temp.innerHTML = `${day.temperature}<span>°C </span>`;
+      text.innerHTML = `
+  Date:<strong> ${formattedDate} </strong> <br>
+  Feels like: ${day.feelsLike} °C<br>
+  Humidity: ${day.humidity} %<br>
+  Wind Speed: ${day.windSpeed} km/h<br>
+  Rain Chance: ${day.rainChance} %<br>
+  Conditions: ${day.conditions}<br>
+`;
+    }
+  });
 }
 
-function requiredData(data) {
-  const filteredData = {
-    temperature: data.currentConditions.temp,
-    feelsLike: data.currentConditions.feelslike,
-    humidity: data.currentConditions.humidity,
-    windSpeed: data.currentConditions.windspeed,
-    rainChance: data.currentConditions.precipprob,
-    rain: data.currentConditions.precip,
-    conditions: data.currentConditions.conditions,
-    icon: data.currentConditions.icon,
-    datetime: data.days[0].datetime,
+function requiredData(day) {
+  return {
+    temperature: day.temp,
+    feelsLike: day.feelslike,
+    humidity: day.humidity,
+    windSpeed: day.windspeed,
+    rainChance: day.precipprob,
+    conditions: day.conditions,
+    icon: day.icon,
+    datetime: day.datetime,
   };
-  return filteredData;
+}
+
+function getDays(data) {
+  const weekData = [];
+  const daysList = data.days;
+  for (let i = 0; i < 7; i++) {
+    weekData.push(requiredData(daysList[i]));
+  }
+  return weekData;
 }
