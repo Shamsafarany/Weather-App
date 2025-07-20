@@ -93,3 +93,18 @@ p{
 .today .temp{
     color: white;
 }
+
+.loader{
+    font-size: 35px;
+}
+.dots{
+    font-size: 80px;
+}
+
+.error{
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+    background-color: lightcoral;
+    height: 25px;
+}

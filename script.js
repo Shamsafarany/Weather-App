@@ -1,8 +1,10 @@
 //get elements
 const form = document.querySelector("form");
 const input = document.querySelector("input");
-const p = document.querySelector(".text");
-const temp = document.querySelector(".temp");
+const loading = document.querySelector(".loader");
+const dot = document.querySelector(".dots");
+const displayContainer = document.querySelector(".displaycontainer");
+let dotinterval;
 
 function getCity() {
   let city = "";
@@ -13,13 +15,18 @@ function getCity() {
   });
 }
 getCity();
+
 async function main(city) {
   const key = "K482S4YYGBPQEHZ292PLUAFN8";
   let url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=metric&key=${key}&contentType=json`;
+  loading.style.display = "block";
+  startDotAnimation();
 
   const data = await getData(url);
   const weekData = await getDays(data);
   printData(weekData);
+  loading.style.display = "none";
+  stopAnimation();
 }
 
 async function getData(url) {
@@ -33,16 +40,19 @@ async function getData(url) {
     return data;
   } catch (error) {
     console.log(error);
-    temp.innerHTML = "";
-    p.innerHTML = "";
-    p.innerHTML = "Invalid input!";
-
+    displayContainer.innerHTML = "";
+    const errorDisplay = document.createElement("div");
+    const text = document.createElement("p");
+    text.classList.add("error");
+    errorDisplay.appendChild(text);
+    displayContainer.appendChild(errorDisplay);
+    text.innerHTML = "Country/city not found!";
+    loading.style.display = "none";
     return;
   }
 }
 
 function printData(weekData) {
-  const displayContainer = document.querySelector(".displaycontainer");
   displayContainer.innerHTML = "";
   weekData.forEach((day, index) => {
     const display = document.createElement("div");
@@ -125,4 +135,19 @@ function getDays(data) {
     weekData.push(requiredData(daysList[i]));
   }
   return weekData;
+}
+
+function startDotAnimation(){
+  let count = 0;
+  dotinterval = setInterval(()=>{
+    count = (count + 1) % 4;
+    if (count === 0) {
+      count++;
+    }
+    dot.textContent = ".".repeat(count);
+  }, 500);
+}
+function stopAnimation(){
+  clearInterval(dotinterval);
+  dot.textContent = "";
 }
