@@ -172,6 +172,20 @@ function changeBackground(icon) {
     case "partly-cloudy-day":
       body.style.backgroundImage = "url('images/partial.jpeg')";
       break;
+    case "overcast":
+      body.style.backgroundImage = "url('images/overcast.jpeg')";
+      break;
+    case "cloudy":
+      body.style.backgroundImage = "url('images/partial.jpeg')";
+      break;
+    case "fog":
+      body.style.backgroundImage = "url('images/overcast.jpeg')";
+      break;
+
+    case "wind":
+      body.style.backgroundImage = "url('images/wind.jpeg')";
+      break;
+
     default:
       body.style.backgroundImage = "";
       break;
