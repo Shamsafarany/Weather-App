@@ -8,6 +8,8 @@ let dotinterval;
 const container = document.querySelector(".container");
 const body = document.querySelector("body");
 
+init();
+
 function getCity() {
   let city = "";
   form.addEventListener("submit", (e) => {
@@ -191,3 +193,45 @@ function changeBackground(icon) {
       break;
   }
 }
+
+async function getCurrentLocation() {
+  const key = "9367a6f9d7bf404d85999acd639a5d42";
+  try {
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    console.log("Latitude:", lat, "Longitude:", lon);
+
+    let url = `https://api.opencagedata.com/geocode/v1/json?q=${lat},${lon}&key=${key}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data.results && data.results.length > 0) {
+      console.log(data);
+      const components = data.results[0].components;
+      const city = components.country;
+      console.log("City:", city);
+      return city;
+    } else {
+      throw new Error("No results found!");
+    }
+  } catch (error) {
+    console.log("Error", error);
+  }
+}
+async function init() {
+  try {
+    const city = await getCurrentLocation(); // wait for resolved city
+    if (city) {
+      input.value = city; // use .value for input fields, not innerHTML
+      await main(city); // load weather
+    }
+  } catch (error) {
+    console.error("Could not get city from location:", error);
+    // Optional fallback
+    // await main("Riyadh");
+  }
+}
+
