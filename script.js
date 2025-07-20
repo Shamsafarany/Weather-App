@@ -223,15 +223,13 @@ async function getCurrentLocation() {
 }
 async function init() {
   try {
-    const city = await getCurrentLocation(); // wait for resolved city
+    const city = await getCurrentLocation(); 
     if (city) {
-      input.value = city; // use .value for input fields, not innerHTML
-      await main(city); // load weather
+      input.value = city;
+      await main(city); 
     }
   } catch (error) {
     console.error("Could not get city from location:", error);
-    // Optional fallback
-    // await main("Riyadh");
   }
 }
 
