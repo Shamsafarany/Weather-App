@@ -2,8 +2,11 @@ body {
   background-color: #f4f4f4;
   margin: 0;
   padding: 20px;
-  height: 100vh;
+
   box-sizing: border-box;
+  font-family: sans-serif;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .container {
   margin: auto;
@@ -23,30 +26,33 @@ form {
   max-width: 700px;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  gap: 15px;
+  align-items: center;
 }
 
 input {
   font-size: 22px;
-  border-radius: 20px;
+  border: none;
+  border-bottom: solid black;
   padding: 10px;
   padding-left: 20px;
-  width: 70%;
-  box-shadow: 0 0 10px;
-  border: none;
+  width: 40%;
+  outline: none;
+  min-width: 75px;
 }
 button {
   font-size: 20px;
   padding: 10px;
-  border-radius: 20px;
-  color: white;
-  background-color:  rgb(108, 63, 63);
+  border-radius: 10px;
+  background-color: white;
+  margin-left: 10px;
+}
+button:hover {
+  background-color: rgb(108, 63, 63);
 }
 
 .temp {
   font-size: 90px;
-  color: rgb(108, 63, 63)
+  color: rgb(108, 63, 63);
 }
 
 span {
@@ -76,35 +82,46 @@ span {
   gap: 5px;
   flex-wrap: wrap;
 }
-.display{
-    flex: 1;
+.display {
+  flex: 1;
 }
-p{
-    height: 150px;
-    padding: 5px;
-    max-width: 230px;
-}
-
-.today{
-    background-color: rgb(108, 63, 63);
-    scale: 1.15;
-    color:white;
-}
-.today .temp{
-    color: white;
+p {
+  height: 150px;
+  padding: 5px;
+  max-width: 230px;
 }
 
-.loader{
-    font-size: 35px;
+.today {
+  background-color: rgb(108, 63, 63);
+  scale: 1.15;
+  color: white;
 }
-.dots{
-    font-size: 80px;
+.today .temp {
+  color: white;
 }
 
-.error{
-    font-size: 20px;
-    font-weight: bold;
-    color: red;
-    background-color: lightcoral;
-    height: 25px;
+.loader {
+  font-size: 35px;
+}
+.dots {
+  font-size: 80px;
+}
+
+.error {
+  font-size: 20px;
+  font-weight: bold;
+  color: red;
+  background-color: lightcoral;
+  height: 25px;
+}
+
+.view {
+  font-size: 23px;
+  display: inline;
+  width: 170px;
+  min-width: 170px;
+}
+
+img {
+  width: 20px;
 }

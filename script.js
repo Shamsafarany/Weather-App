@@ -5,6 +5,8 @@ const loading = document.querySelector(".loader");
 const dot = document.querySelector(".dots");
 const displayContainer = document.querySelector(".displaycontainer");
 let dotinterval;
+const container = document.querySelector(".container");
+const body = document.querySelector("body");
 
 function getCity() {
   let city = "";
@@ -47,7 +49,13 @@ async function getData(url) {
     errorDisplay.appendChild(text);
     displayContainer.appendChild(errorDisplay);
     text.innerHTML = "Country/city not found!";
+    const img = document.createElement("img");
+    img.src = "cloud_14407549.png";
+    img.style.width = "30px";
+    img.style.marginLeft = "100px";
+    errorDisplay.appendChild(img);
     loading.style.display = "none";
+    body.style.backgroundImage = "";
     return;
   }
 }
@@ -67,6 +75,7 @@ function printData(weekData) {
 
     if (index === 0) {
       display.classList.add("today");
+      changeBackground(day.icon);
     }
 
     console.log("Temperature:", day.temperature + " °C");
@@ -137,9 +146,9 @@ function getDays(data) {
   return weekData;
 }
 
-function startDotAnimation(){
+function startDotAnimation() {
   let count = 0;
-  dotinterval = setInterval(()=>{
+  dotinterval = setInterval(() => {
     count = (count + 1) % 4;
     if (count === 0) {
       count++;
@@ -147,7 +156,24 @@ function startDotAnimation(){
     dot.textContent = ".".repeat(count);
   }, 500);
 }
-function stopAnimation(){
+function stopAnimation() {
   clearInterval(dotinterval);
   dot.textContent = "";
+}
+
+function changeBackground(icon) {
+  switch (icon) {
+    case "clear-day":
+      body.style.backgroundImage = "url('images/clear.jpeg')";
+      break;
+    case "rain":
+      body.style.backgroundImage = "url('images/rain.jpeg')";
+      break;
+    case "partly-cloudy-day":
+      body.style.backgroundImage = "url('images/partial.jpeg')";
+      break;
+    default:
+      body.style.backgroundImage = "";
+      break;
+  }
 }
