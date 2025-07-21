@@ -7,6 +7,7 @@ const displayContainer = document.querySelector(".displaycontainer");
 let dotinterval;
 const container = document.querySelector(".container");
 const body = document.querySelector("body");
+const checkbox = document.querySelector("#checkbox");
 
 init();
 
@@ -27,7 +28,9 @@ async function main(city) {
   startDotAnimation();
 
   const data = await getData(url);
-  const weekData = await getDays(data);
+  const maxDays = checkbox.checked ? 14 : 7;
+  const weekData = await getDays(data, maxDays);
+  
   printData(weekData);
   loading.style.display = "none";
   stopAnimation();
@@ -63,6 +66,7 @@ async function getData(url) {
 }
 
 function printData(weekData) {
+  
   displayContainer.innerHTML = "";
   weekData.forEach((day, index) => {
     const display = document.createElement("div");
@@ -139,10 +143,11 @@ function requiredData(day) {
   };
 }
 
-function getDays(data) {
+function getDays(data, max) {
   const weekData = [];
   const daysList = data.days;
-  for (let i = 0; i < 7; i++) {
+  
+  for (let i = 0; i < max; i++) {
     weekData.push(requiredData(daysList[i]));
   }
   return weekData;
